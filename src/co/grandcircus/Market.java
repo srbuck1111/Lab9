@@ -27,7 +27,7 @@ public class Market {
 
 		Scanner scan = new Scanner(System.in);
 
-		System.out.printf("%-12s $%-7s\n", "Item", "Price");
+		System.out.printf("%-12s %-7s\n", "Item", "Price");
 		System.out.println("======================");
 
 		String ans = "Y";
@@ -37,7 +37,7 @@ public class Market {
 			names.clear();
 			prices.clear();
 			quantities.clear();
-			
+
 			for (String i : market.keySet()) {
 
 				System.out.printf("%-12s $%-5.2f\n", i, market.get(i));
@@ -46,6 +46,8 @@ public class Market {
 
 			String choice = "not exit";
 			double total = 0.0;
+
+			System.out.println("======================");
 
 			while (!choice.equalsIgnoreCase("exit")) {
 
@@ -87,62 +89,70 @@ public class Market {
 
 			}
 
-			List<String> highItems = getHighItem(names, prices);
-			List<String> lowItems = getLowItem(names, prices);
+			if (names.size() > 0) {
 
-			System.out.println("Items Bought:\n");
-			
-			System.out.printf("\n%-12s $%-7s %-10s\n", "Item", "Price" , "Quantiity");
-			System.out.println("=====================================");
-			
-			for (int i = 0; i < names.size(); i++) {
-				
-				System.out.printf("%-12s %-4.2f %-4d\n" , names.get(i) , prices.get(i) , quantities.get(i));
-				
-			}
-			
-			System.out.printf("\nTotal cost: %.2f\n", total);
+				List<String> highItems = getHighItem(names, prices);
+				List<String> lowItems = getLowItem(names, prices);
 
-			System.out.printf("\nAverage cost: %.2f\n", getAverage(prices, quantities));
+				System.out.println("Items Bought:\n");
 
-			System.out.print("\nFor " + getHighValue(prices) + " each, the most expensive product");
+				System.out.printf("\n%-12s %-10s %-10s\n", "Item", "Price", "Quantiity");
+				System.out.println("=====================================");
 
-			if (highItems.size() > 1) {
+				for (int i = 0; i < names.size(); i++) {
 
-				System.out.println("s bought were:");
+					System.out.printf("%-12s %-10.2f %-4d\n", names.get(i), prices.get(i), quantities.get(i));
+
+				}
+
+				System.out.printf("\nTotal cost: %.2f\n", total);
+
+				System.out.printf("\nAverage cost: %.2f\n", getAverage(prices, quantities));
+
+				System.out.print("\nFor " + getHighValue(prices) + " each, the most expensive product");
+
+				if (highItems.size() > 1) {
+
+					System.out.println("s bought were:");
+
+				} else {
+
+					System.out.println(" bought was:");
+
+				}
+
+				for (String i : highItems) {
+
+					System.out.println(i);
+
+				}
+
+				System.out.print("\nFor " + getLowValue(prices) + " each, the least expensive product");
+
+				if (lowItems.size() > 1) {
+
+					System.out.println("s bought were:");
+
+				} else {
+
+					System.out.println(" bought was:");
+
+				}
+
+				for (String i : lowItems) {
+
+					System.out.println(i);
+
+				}
 
 			} else {
-
-				System.out.println(" bought was:");
-
-			}
-
-			for (String i : highItems) {
-
-				System.out.println(i);
-
-			}
-
-			System.out.print("\nFor " + getLowValue(prices) + " each, the least expensive product");
-
-			if (lowItems.size() > 1) {
-
-				System.out.println("s bought were:");
-
-			} else {
-
-				System.out.println(" bought was:");
-
-			}
-
-			for (String i : lowItems) {
-
-				System.out.println(i);
-
+				
+				System.out.println("You bought nothing.");
+				
 			}
 
 			System.out.println("\nAgain? (Y/N)");
-			scan.nextLine();
+			ans = scan.nextLine();
 
 		}
 
