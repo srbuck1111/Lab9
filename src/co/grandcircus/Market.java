@@ -30,95 +30,119 @@ public class Market {
 		System.out.printf("%-12s $%-7s\n", "Item", "Price");
 		System.out.println("======================");
 
-		for (String i : market.keySet()) {
+		String ans = "Y";
 
-			System.out.printf("%-12s $%-5.2f\n", i, market.get(i));
+		while (ans.equalsIgnoreCase("Y")) {
 
-		}
+			names.clear();
+			prices.clear();
+			quantities.clear();
+			
+			for (String i : market.keySet()) {
 
-		String choice = "not exit";
-		double total = 0.0;
+				System.out.printf("%-12s $%-5.2f\n", i, market.get(i));
 
-		while (!choice.equalsIgnoreCase("exit")) {
+			}
 
-			choice = Validator.getString(scan,
-					"What would you like to add?\n(enter as seen above, or exit to finish)\n");
+			String choice = "not exit";
+			double total = 0.0;
 
-			while (!market.containsKey(choice)) {
-
-				if (choice.equalsIgnoreCase("exit")) {
-
-					break;
-
-				}
-
-				System.out.println(choice + " not available.");
+			while (!choice.equalsIgnoreCase("exit")) {
 
 				choice = Validator.getString(scan,
 						"What would you like to add?\n(enter as seen above, or exit to finish)\n");
 
+				while (!market.containsKey(choice)) {
+
+					if (choice.equalsIgnoreCase("exit")) {
+
+						break;
+
+					}
+
+					System.out.println(choice + " not available.");
+
+					choice = Validator.getString(scan,
+							"What would you like to add?\n(enter as seen above, or exit to finish)\n");
+
+				}
+
+				if (!names.contains(choice) && !choice.equalsIgnoreCase("exit")) {
+
+					names.add(choice);
+					prices.add(market.get(choice));
+					quantities.add(1);
+
+				} else if (!choice.equalsIgnoreCase("exit")) {
+
+					quantities.set(names.indexOf(choice), quantities.get(names.indexOf(choice)) + 1);
+
+				}
+
+				if (!choice.equals("exit")) {
+
+					total += prices.get(names.indexOf(choice));
+
+				}
+
 			}
 
-			if (!names.contains(choice) && !choice.equalsIgnoreCase("exit")) {
+			List<String> highItems = getHighItem(names, prices);
+			List<String> lowItems = getLowItem(names, prices);
 
-				names.add(choice);
-				prices.add(market.get(choice));
-				quantities.add(1);
+			System.out.println("Items Bought:\n");
+			
+			System.out.printf("\n%-12s $%-7s %-10s\n", "Item", "Price" , "Quantiity");
+			System.out.println("=====================================");
+			
+			for (int i = 0; i < names.size(); i++) {
+				
+				System.out.printf("%-12s %-4.2f %-4d\n" , names.get(i) , prices.get(i) , quantities.get(i));
+				
+			}
+			
+			System.out.printf("\nTotal cost: %.2f\n", total);
 
-			} else if (!choice.equalsIgnoreCase("exit")) {
+			System.out.printf("\nAverage cost: %.2f\n", getAverage(prices, quantities));
 
-				quantities.set(names.indexOf(choice), quantities.get(names.indexOf(choice)) + 1);
+			System.out.print("\nFor " + getHighValue(prices) + " each, the most expensive product");
+
+			if (highItems.size() > 1) {
+
+				System.out.println("s bought were:");
+
+			} else {
+
+				System.out.println(" bought was:");
 
 			}
 
-			if (!choice.equals("exit")) {
+			for (String i : highItems) {
 
-				total += prices.get(names.indexOf(choice));
+				System.out.println(i);
 
 			}
 
-		}
+			System.out.print("\nFor " + getLowValue(prices) + " each, the least expensive product");
 
-		List<String> highItems = getHighItem(names, prices);
-		List<String> lowItems = getLowItem(names, prices);
+			if (lowItems.size() > 1) {
 
-		System.out.printf("Total cost: %.2f\n" , total);
+				System.out.println("s bought were:");
 
-		System.out.printf("\nAverage cost: %.2f\n" , getAverage(prices, quantities));
+			} else {
 
-		System.out.print("\nFor " + getHighValue(prices) + " each, the most expensive product");
+				System.out.println(" bought was:");
 
-		if (highItems.size() > 1) {
+			}
 
-			System.out.println("s bought were:");
+			for (String i : lowItems) {
 
-		} else {
+				System.out.println(i);
 
-			System.out.println(" bought was:");
+			}
 
-		}
-
-		for (String i : highItems) {
-
-			System.out.println(i);
-
-		}
-
-		System.out.print("\nFor " + getLowValue(prices) + " each, the least expensive product");
-
-		if (lowItems.size() > 1) {
-
-			System.out.println("s bought were:");
-
-		} else {
-
-			System.out.println(" bought was:");
-
-		}
-
-		for (String i : lowItems) {
-
-			System.out.println(i);
+			System.out.println("\nAgain? (Y/N)");
+			scan.nextLine();
 
 		}
 
